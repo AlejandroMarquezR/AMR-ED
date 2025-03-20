@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug App",
+            "request": "launch",
+            "mainClass": "com.ejemplo.App",
+            "projectName": "mi-proyecto"
+        },
+        {
+            "type": "java",
+            "name": "Debug Calculadora",
+            "request": "launch",
+            "mainClass": "main.java.com.ejemplo.Calculadora",
+            "projectName": "mi-proyecto"
+        }
+    ]
+}
