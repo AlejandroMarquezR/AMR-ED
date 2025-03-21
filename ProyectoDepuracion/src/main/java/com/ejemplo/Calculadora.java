@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class Calculadora
 {
+    private static int contador = 0; // Recurso compartido entre el hilo principal y el hilo creado
+
     public static void main(String[] args)
     {
         Scanner scanner = new Scanner(System.in);
@@ -25,7 +27,7 @@ public class Calculadora
         }
         else if (operacion == 2)
         {
-            // Error lógico: Resta incorrecta
+            // Error lógico: Resta incorrecta 
             resultado = num1 + num2; // Debería ser num1 - num2
             System.out.println("El resultado de la resta es: " + resultado);
         }
@@ -37,23 +39,38 @@ public class Calculadora
         else if (operacion == 4)
         {
             // Error de ejecución: División por cero
-            if (num2 == 0) {
+            if (num2 == 0)
+            {
                 num2 = 0; // Esto provocará un error de ejecución
             }
-            resultado = num1 / num2;
+            resultado = num1 / num2; // se esta dividiendo por 0 , eso va a generar un error de ejecucion
             System.out.println("El resultado de la división es: " + resultado);
         }
         else
         {
-            System.out.println("Operación no válida.") //Aquí un ;
+            System.out.println("Operación no válida.") // Aquí un ;
             // Error de sintaxis: Falta un punto y coma
         }
 
-        // Error de concurrencia y asincronía: Uso incorrecto de un hilo sin sincronización
         Thread thread = new Thread(() -> {
-            System.out.println("Hilo ejecutándose sin sincronización");
+            for (int i = 0; i < 1000; i++)
+            {
+                // Error de concurrencia: Modificación de recurso compartido sin sincronización
+                contador++; // Esto puede generar un resultado incorrecto debido a la falta de sincronización
+            }
+            System.out.println("Hilo ejecutándose sin sincronización, contador: " + contador);
         });
         thread.start();
+
+        // Añadir un pequeño delay para permitir que el hilo termine antes de cerrar el scanner
+        try
+        {
+            Thread.sleep(100); // Espera de 100ms
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
 
         scanner.close();
     }    
