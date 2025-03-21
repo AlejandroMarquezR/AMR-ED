@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Calculadora
 {
-    private static int contador = 0; // Recurso compartido entre el hilo principal y el hilo creado
+    private static int contador = 0;
 
     public static void main(String[] args)
     {
@@ -27,8 +27,7 @@ public class Calculadora
         }
         else if (operacion == 2)
         {
-            // Error lógico: Resta incorrecta 
-            resultado = num1 + num2; // Debería ser num1 - num2
+            resultado = num1 - num2;
             System.out.println("El resultado de la resta es: " + resultado);
         }
         else if (operacion == 3)
@@ -38,34 +37,35 @@ public class Calculadora
         }
         else if (operacion == 4)
         {
-            // Error de ejecución: División por cero
             if (num2 == 0)
             {
-                num2 = 0; // Esto provocará un error de ejecución
+                System.out.println("Error: División por cero.");
+                return;
             }
-            resultado = num1 / num2; // se esta dividiendo por 0 , eso va a generar un error de ejecucion
+            resultado = num1 / num2;
             System.out.println("El resultado de la división es: " + resultado);
         }
         else
         {
-            System.out.println("Operación no válida.") // Aquí un ;
-            // Error de sintaxis: Falta un punto y coma
+            System.out.println("Operación no válida.");
+            return;
         }
 
         Thread thread = new Thread(() -> {
             for (int i = 0; i < 1000; i++)
             {
-                // Error de concurrencia: Modificación de recurso compartido sin sincronización
-                contador++; // Esto puede generar un resultado incorrecto debido a la falta de sincronización
+                synchronized (Calculadora.class)
+                {
+                    contador++;
+                }
             }
-            System.out.println("Hilo ejecutándose sin sincronización, contador: " + contador);
+            System.out.println("Hilo ejecutándose, contador: " + contador);
         });
         thread.start();
 
-        // Añadir un pequeño delay para permitir que el hilo termine antes de cerrar el scanner
         try
         {
-            Thread.sleep(100); // Espera de 100ms
+            Thread.sleep(100);
         }
         catch (InterruptedException e)
         {
@@ -73,5 +73,5 @@ public class Calculadora
         }
 
         scanner.close();
-    }    
+    }
 }
